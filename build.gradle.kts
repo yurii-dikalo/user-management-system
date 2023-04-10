@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "2.7.10"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
+    id("checkstyle")
 }
 
 group = "com.example"
@@ -30,6 +31,18 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+}
+
+checkstyle {
+    toolVersion = "8.43"
+    configFile = file("checkstyle.xml")
+}
+
+tasks.withType<Checkstyle> {
+    reports {
+        xml.isEnabled = false
+        html.isEnabled = true
+    }
 }
 
 tasks.withType<Test> {
