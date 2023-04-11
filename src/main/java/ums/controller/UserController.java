@@ -38,7 +38,6 @@ public class UserController {
     public UserResponseDto save(@RequestBody @Valid UserRequestDto requestDto) {
         User user = userMapper.toModel(requestDto);
         user.setStatus(User.Status.ACTIVE);
-//        user.setCreatedAt(LocalDateTime.now());
         return userMapper.toDto(userService.save(user));
     }
 

@@ -27,6 +27,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserBuilder userBuilder;
         if (userOptional.isPresent()) {
             User user = userOptional.get();
+            if (user.getStatus() != User.Status.ACTIVE) {
+                throw new UsernameNotFoundException("Active user not found with username: " + username);
+            }
             userBuilder = withUsername(username);
             userBuilder.password(user.getPassword());
             userBuilder.roles(user.getRoles()

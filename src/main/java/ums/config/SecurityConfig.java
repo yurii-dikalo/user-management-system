@@ -8,9 +8,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ums.model.Role;
+import ums.service.security.jwt.JwtConfigurer;
+import ums.service.security.jwt.JwtTokenProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -20,6 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String USER = Role.RoleName.USER.name();
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -28,20 +32,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/users/new").hasRole(ADMIN)
                 .antMatchers(HttpMethod.GET, "/users/**").hasAnyRole(ADMIN, USER)
                 .antMatchers(HttpMethod.PUT, "/users/{id}/edit").hasRole(ADMIN)
-                .anyRequest().authenticated()
+                .antMatchers("/login").permitAll()
                 .and()
-                .formLogin()
-                .permitAll()
+                .apply(new JwtConfigurer(jwtTokenProvider))
                 .and()
-                .logout()
-                .permitAll()
-                .and()
-                .httpBasic()
-                .and()
-                .csrf().disable();
+                .headers().frameOptions().disable();
     }
 }
