@@ -34,6 +34,8 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.11.2")
     implementation("io.jsonwebtoken:jjwt-impl:0.11.2")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.2")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.4")
+    implementation("org.springdoc:springdoc-openapi-data-rest:1.6.4")
 }
 
 checkstyle {
@@ -46,6 +48,10 @@ tasks.withType<Checkstyle> {
         xml.isEnabled = false
         html.isEnabled = true
     }
+}
+
+tasks.withType<JavaCompile> {
+    options.annotationProcessorPath = configurations.annotationProcessor.get().asFileTree
 }
 
 tasks.withType<Test> {
