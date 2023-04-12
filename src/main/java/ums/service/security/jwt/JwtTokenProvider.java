@@ -5,13 +5,12 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,7 +35,9 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded());
+        secretKey = Base64.getEncoder()
+                .encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS256)
+                        .getEncoded());
     }
 
     public String createToken(String username, List<String> roles) {

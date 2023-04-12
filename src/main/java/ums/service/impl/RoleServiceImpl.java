@@ -10,6 +10,7 @@ import ums.service.RoleService;
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
+
     @Override
     public Role save(Role role) {
         return roleRepository.save(role);

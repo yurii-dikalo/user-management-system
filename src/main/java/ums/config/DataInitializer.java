@@ -1,5 +1,7 @@
 package ums.config;
 
+import java.util.Set;
+import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -7,9 +9,6 @@ import ums.model.Role;
 import ums.model.User;
 import ums.service.RoleService;
 import ums.service.UserService;
-
-import javax.annotation.PostConstruct;
-import java.util.Set;
 
 @Component
 @RequiredArgsConstructor

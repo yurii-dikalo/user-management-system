@@ -1,5 +1,8 @@
 package ums.service.security;
 
+import static org.springframework.security.core.userdetails.User.withUsername;
+
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,13 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ums.model.Role;
 import ums.model.User;
 import ums.repository.UserRepository;
-
-import java.util.Optional;
-
-import static org.springframework.security.core.userdetails.User.withUsername;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +26,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (user.getStatus() != User.Status.ACTIVE) {
-                throw new UsernameNotFoundException("Active user not found with username: " + username);
+                throw new UsernameNotFoundException("Active user not found with username: "
+                        + username);
             }
             userBuilder = withUsername(username);
             userBuilder.password(user.getPassword());

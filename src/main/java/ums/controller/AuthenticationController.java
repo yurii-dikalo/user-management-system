@@ -1,5 +1,8 @@
 package ums.controller;
 
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +15,6 @@ import ums.model.User;
 import ums.service.security.AuthenticationService;
 import ums.service.security.jwt.JwtTokenProvider;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
 public class AuthenticationController {
@@ -24,7 +23,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid UserLoginDto userLoginDto)
-        throws AuthenticationException {
+            throws AuthenticationException {
         User user = authenticationService.login(userLoginDto.username(),
                 userLoginDto.password());
         String token = jwtTokenProvider.createToken(

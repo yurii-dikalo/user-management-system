@@ -1,10 +1,10 @@
 package ums.controller;
 
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,12 +18,10 @@ import ums.dto.request.StatusRequestDto;
 import ums.dto.request.UserEditRequestDto;
 import ums.dto.request.UserRequestDto;
 import ums.dto.response.UserResponseDto;
-import ums.service.mapper.impl.UserMapper;
 import ums.model.User;
 import ums.service.UserService;
+import ums.service.mapper.impl.UserMapper;
 import ums.util.SortUtil;
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")

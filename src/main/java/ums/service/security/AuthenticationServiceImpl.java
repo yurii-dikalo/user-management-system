@@ -7,13 +7,12 @@ import ums.exception.AuthenticationException;
 import ums.model.User;
 import ums.service.UserService;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+
     @Override
     public User login(String username, String password) throws AuthenticationException {
         User user = userService.findByUsername(username);

@@ -1,10 +1,9 @@
 package ums.dto.response;
 
-import ums.model.Role;
-import ums.model.User;
-
 import java.time.LocalDateTime;
 import java.util.Set;
+import ums.model.Role;
+import ums.model.User;
 
 public record UserResponseDto(
         Long id,

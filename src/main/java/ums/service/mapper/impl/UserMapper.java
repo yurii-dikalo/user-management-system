@@ -3,9 +3,9 @@ package ums.service.mapper.impl;
 import org.springframework.stereotype.Component;
 import ums.dto.request.UserRequestDto;
 import ums.dto.response.UserResponseDto;
+import ums.model.User;
 import ums.service.mapper.DtoRequestMapper;
 import ums.service.mapper.DtoResponseMapper;
-import ums.model.User;
 
 @Component
 public class UserMapper implements DtoRequestMapper<UserRequestDto, User>,
