@@ -36,4 +36,13 @@ public class AuthenticationController {
         );
         return new ResponseEntity<>(Map.of("token", token), HttpStatus.OK);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String token = jwtTokenProvider.resolveToken(request);
+        if (token != null) {
+            jwtTokenProvider.blacklistToken(token);
+        }
+        return ResponseEntity.ok().build();
+    }
 }

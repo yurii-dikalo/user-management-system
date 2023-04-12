@@ -3,6 +3,7 @@ package ums.dto.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import ums.validation.UniqueUsername;
 
 public record UserRequestDto(
         @NotBlank(message = "Username is mandatory")
@@ -10,6 +11,7 @@ public record UserRequestDto(
                 message = "Username length must be between 3 and 16")
         @Pattern(regexp = "^[a-zA-Z]+$",
                 message = "Username must contain only latin characters")
+        @UniqueUsername
         String username,
         @NotBlank(message = "Password is mandatory")
         @Size(min = 3, max = 16,

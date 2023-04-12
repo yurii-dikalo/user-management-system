@@ -1,6 +1,9 @@
 package ums.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ums.model.Role;
@@ -20,11 +23,10 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<User> findAll(PageRequest pageRequest) {
+        return userRepository.findAll(pageRequest).toList();
     }
 
     @Override
@@ -32,8 +34,6 @@ public class UserServiceImpl implements UserService {
         if(user.getRoles() == null) {
             user.setRoles(Set.of(roleRepository.findRoleByRoleName(Role.RoleName.USER)));
         }
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
         return userRepository.save(user);
     }
 
@@ -44,7 +44,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new NoSuchElementException("There is no user with username: " + username)
+        );
     }
 }

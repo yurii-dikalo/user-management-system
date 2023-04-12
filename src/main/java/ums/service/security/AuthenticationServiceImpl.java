@@ -16,16 +16,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     @Override
     public User login(String username, String password) throws AuthenticationException {
-        Optional<User> userOptional = userService.findByUsername(username);
-        if (userOptional.isEmpty()
-                || !passwordEncoder.matches(password, userOptional.get().getPassword())
-        ) {
-            throw new AuthenticationException("Incorrect username or password.");
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            throw new AuthenticationException("Invalid credentials.");
         }
-        if (userOptional.get().getStatus().equals(User.Status.INACTIVE)) {
-            throw new AuthenticationException("User with username " + username
-                    + " is not active.");
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new AuthenticationException("Invalid password.");
         }
-        return userOptional.get();
+        if (user.getStatus().equals(User.Status.INACTIVE)) {
+            throw new AuthenticationException("Status inactive.");
+        }
+        return user;
     }
 }

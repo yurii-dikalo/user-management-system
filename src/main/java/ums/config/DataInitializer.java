@@ -28,7 +28,8 @@ public class DataInitializer {
         roleService.save(userRole);
         User admin = new User();
         admin.setUsername("admin");
-        admin.setPassword("a1234");
+        String encodedPassword = passwordEncoder.encode("a1234");
+        admin.setPassword(encodedPassword);
         admin.setFirstName("admin");
         admin.setLastName("admin");
         admin.setRoles(Set.of(adminRole));

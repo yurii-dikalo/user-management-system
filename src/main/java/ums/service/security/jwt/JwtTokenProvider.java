@@ -20,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import ums.exception.InvalidJwtAuthenticationException;
+import ums.model.BlacklistedToken;
+import ums.repository.BlacklistedTokenRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.expire-length:3600000}")
     private long validityInMilliseconds;
     private final UserDetailsService userDetailsService;
+    private final BlacklistedTokenRepository blacklistedTokenRepository;
 
     @PostConstruct
     protected void init() {
@@ -73,6 +76,9 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
+        if (isTokenBlacklisted(token)) {
+            return false;
+        }
         try {
             Jws<Claims> claimsJws = Jwts.parser()
                     .setSigningKey(secretKey)
@@ -81,5 +87,14 @@ public class JwtTokenProvider {
         } catch (JwtException | IllegalArgumentException e) {
             throw new InvalidJwtAuthenticationException("Expired or invalid JWT token", e);
         }
+    }
+
+    public void blacklistToken(String token) {
+        BlacklistedToken blacklistedToken = new BlacklistedToken(token);
+        blacklistedTokenRepository.save(blacklistedToken);
+    }
+
+    public boolean isTokenBlacklisted(String token) {
+        return blacklistedTokenRepository.existsByToken(token);
     }
 }
